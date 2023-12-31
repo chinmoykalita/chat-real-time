@@ -21,14 +21,15 @@ server.listen(8080, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
 });
 
- const wsServer = new WebSocketServer({
+const wsServer = new WebSocketServer({
     httpServer: server,
-    autoAcceptConnections: true
+    autoAcceptConnections: false
 });
 
 function originIsAllowed(origin: string) {
   return true;
 }
+
 
 wsServer.on('request', function(request) {
     console.log("inside connect");
@@ -59,7 +60,7 @@ wsServer.on('request', function(request) {
 function messagesHandler(ws: connection, message: IncommingMessage) {
     if (message.type == SupportedMessage.JoinRoom) {
         const payload = message.payload;
-        userManager.addUser(payload.name, payload.userId, payload.roomId, ws)
+        userManager.addUser(payload.name, payload.userId, payload.roomId, ws);
     };
     if (message.type == SupportedMessage.SendMessage) {
         const payload = message.payload;

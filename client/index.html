@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Real time chat app</h3>
+    <br>
+    <input id="messagebox" placeholder="enter your message" type="text">
+    <button onclick="sendMessage()" type="submit">send</button>
+    <br />
+    <div id="messageList">
+    </div>
+    
+    <script>
+        const socket = new WebSocket("ws://localhost:8080", ['echo-protocol']);
+           // Connection opened
+        socket.addEventListener('open', (event) => {
+            console.log('WebSocket connection opened:', event);
+
+            // Send a message to the server
+            socket.send(JSON.stringify({
+                "type": "JOIN_ROOM",
+                "payload": {
+                    "name": "Chinmoy",
+                    "userId": "1",
+                    "roomId": "1"
+                }
+            }));
+        });
+        socket.addEventListener('message', (event) => {
+            console.log("Message recieved");
+            let message = JSON.parse(event.data).payload?.message;
+            console.log(message);
+            let node = document.createElement('p');
+            let messageNode = document.createTextNode(message);
+            node.appendChild(messageNode)
+            let elem = document.getElementById('messageList')
+            elem.appendChild(node);
+            
+        });
+        function sendMessage(event) {
+            let input = document.getElementById('messagebox').value;
+            socket.send(JSON.stringify({
+                "type": "SEND_MESSAGE",
+                "payload": {
+                    "userId": "1",
+                    "roomId": "1",
+                    "message": input
+                }
+            }));
+        }
+
+    </script>
+</body>
+</html>
