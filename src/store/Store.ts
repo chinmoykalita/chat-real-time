@@ -1,7 +1,7 @@
 export type UserId = string;
 export interface Chat {
-    chatId: string;
-    id: UserId,
+    id: string;
+    userId: UserId,
     name: string,
     message: string,
     upvotes: UserId[] //who has upvoted
