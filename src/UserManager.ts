@@ -27,7 +27,7 @@ export class UserManager {
             id: userId,
             name,
             connection: socket
-        }); 
+        });
     };
 
     getUser(roomId: string, userId: string) {
