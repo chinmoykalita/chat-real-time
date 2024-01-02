@@ -1,12 +1,21 @@
 import {server as WebSocketServer, connection} from "websocket"
 import { messagesHandler } from "./realTimeHandler";
 import express from "express";
-import ChatRouter from "./routes";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+
+import userRouter from "./routes/user";
 
 const app = express();
 const port = 8080;
 
-app.use('/', ChatRouter);
+app.use(bodyParser.json())
+app.use('/', userRouter);
+
+mongoose.connect('')
+    .then(() => {
+        console.log("MongoDB connected.")
+    })
 
 const server = app.listen(port, () => {
     console.log("Express server started on port", port)
@@ -19,8 +28,7 @@ const wsServer = new WebSocketServer({
 
 function originIsAllowed(origin: string) {
   return true;
-}
-
+};
 
 wsServer.on('request', function(request) {
     console.log("Websocket connected");
