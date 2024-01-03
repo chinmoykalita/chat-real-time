@@ -3,16 +3,21 @@ import { messagesHandler } from "./realTimeHandler";
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import { config as dotEnvConfig } from "dotenv";
 
 import userRouter from "./routes/user";
 
 const app = express();
 const port = 8080;
 
+dotEnvConfig();
+
 app.use(bodyParser.json())
 app.use('/', userRouter);
 
-mongoose.connect('')
+const MONGO_URI = process.env.MONGODB_URI || '';
+
+mongoose.connect(MONGO_URI)
     .then(() => {
         console.log("MongoDB connected.")
     })
