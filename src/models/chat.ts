@@ -1,14 +1,17 @@
 import mongoose, { mongo } from "mongoose";
 import User from "./user";
+import Room from "./room";
 
 const Schema = mongoose.Schema;
 
 const chatSchema = new Schema(
     {
-        messageBy: User,
+        userId: String,
+        name: String,
         message: String,
-        upvotes: { 
-            type: mongoose.Types.ObjectId, 
+        room: Room,
+        upvotes: {
+            type: String, 
             ref: "User"
         }
     },

@@ -3,7 +3,7 @@ import { OutGoingMessages } from "./messages/outgoingMessages";
 
 interface User {
     name: string;
-    id: string;
+    _id: string;
     connection: connection;
 };
 
@@ -24,7 +24,7 @@ export class UserManager {
             });
         };
         this.rooms.get(roomId)?.users.push({
-            id: userId,
+            _id: userId,
             name,
             connection: socket
         });
@@ -33,7 +33,7 @@ export class UserManager {
     getUser(roomId: string, userId: string) {
         const users = this.rooms.get(roomId)?.users;
         if (users) {
-            return users.find(({id}) => id === userId)
+            return users.find(({_id}) => _id === userId)
         }
 
     };
@@ -41,7 +41,7 @@ export class UserManager {
     removeUser(roomId: string, userId: string) {
         const users = this.rooms.get(roomId)?.users;
         if (users) {
-            users.filter(({id}) => id === userId);
+            users.filter(({_id}) => _id === userId);
         }
     };
 

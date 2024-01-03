@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import { config as dotEnvConfig } from "dotenv";
 
-import userRouter from "./routes/user";
+import router from "./routes";
 
 const app = express();
 const port = 8080;
@@ -13,7 +13,7 @@ const port = 8080;
 dotEnvConfig();
 
 app.use(bodyParser.json())
-app.use('/', userRouter);
+app.use('/', router);
 
 const MONGO_URI = process.env.MONGODB_URI || '';
 
