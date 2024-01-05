@@ -6,7 +6,7 @@ import Room from "../models/room";
 const router = Router();
 
 router.get('/ping', (req, res) => {
-    res.json("OK")
+    res.json("OK nice so good baby")
 })
 router.post('/create_user', userAlreadyExists, async (req, res) => {
     let name = req.body.name;
