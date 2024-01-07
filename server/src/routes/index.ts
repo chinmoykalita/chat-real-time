@@ -93,6 +93,4 @@ router.get('/get_one_room', async (req, res) => {
 
 })
 
-
-
 export default router

@@ -1,4 +1,4 @@
-import { string, z } from "zod";
+import { z } from "zod";
 
 const createUserBody = z.object({
     name: z.string(),

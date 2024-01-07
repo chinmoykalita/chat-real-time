@@ -5,10 +5,10 @@ export enum SupportedMessage {
 };
 
 export type MessagePayload = {
-    roomId: string;
+    // roomId: string;
     message: string;
     name: string;
-    upvotes: number;
+    // upvotes: number;
     chatId: string;
 }
 
