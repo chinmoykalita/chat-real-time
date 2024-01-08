@@ -9,7 +9,7 @@ const userManager = new UserManager();
 // const store = new Store();
 const store = new MongoDBStore();
 
-export async function messagesHandler(ws: connection, message: IncommingMessage) {
+export async function messagesHandler2(ws: connection, message: IncommingMessage) {
     if (message.type == SupportedMessage.JoinRoom) {
         const payload = message.payload;
         store.joinRoom(payload.roomId, ws);

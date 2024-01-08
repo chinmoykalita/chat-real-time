@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import { config as dotEnvConfig } from "dotenv";
 
 import router from "./routes";
+import { messagesHandler2 } from "./realTimeHandler2";
 
 const app = express();
 const port = 8080;
@@ -52,7 +53,8 @@ wsServer.on('request', function(request) {
         // Todo add rate limitting logic here 
         if (message.type === 'utf8') {
             try {
-                messagesHandler(connection, JSON.parse(message.utf8Data));
+                // messagesHandler(connection, JSON.parse(message.utf8Data));
+                messagesHandler2(connection, JSON.parse(message.utf8Data));
             } catch(e) {
                 throw Error();
             }
