@@ -24,6 +24,8 @@ export default function Home() {
         <li>r</li>
       )}
 
+      <h3>Join room to chat</h3>
+
     </div>
   )
 }
