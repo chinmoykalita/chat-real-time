@@ -25,6 +25,7 @@ export default function Home() {
       )}
 
       <h3>Join room to chat</h3>
+      <h3>Project is built using express mongodb next js and typescript</h3>
 
     </div>
   )
