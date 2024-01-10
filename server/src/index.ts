@@ -1,6 +1,6 @@
 import {server as WebSocketServer, connection} from "websocket"
 import { messagesHandler } from "./realTimeHandler";
-import express from "express";
+import express, { NextFunction, Response, Request } from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import { config as dotEnvConfig } from "dotenv";
@@ -13,11 +13,21 @@ const port = 8080;
 
 dotEnvConfig();
 
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Max-Age", "1800");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    res.setHeader("Access-Control-Allow-Methods","PUT, POST, GET, DELETE, PATCH, OPTIONS");
+    next();
+});
 app.use(bodyParser.json())
 app.use('/', router);
 
+
 const MONGO_URI = process.env.MONGODB_URI || '';
 
+console.log("connecting to the mongo db")
 mongoose.connect(MONGO_URI)
     .then(() => {
         console.log("MongoDB connected.")

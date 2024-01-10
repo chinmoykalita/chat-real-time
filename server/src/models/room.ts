@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const roomSchema = new Schema({
-    roomName: String,
-    private: Boolean,
-    password: String
+    roomName: { type: String },
+    private: { type: Boolean },
+    password: { type: String }
 
 });
 

@@ -1,6 +1,6 @@
 
-export interface Room {
-    _id: String;
-    roomName: String,
+export interface RoomType {
+    _id: string;
+    roomName: string,
     private: Boolean
 }

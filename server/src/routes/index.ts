@@ -70,22 +70,21 @@ router.get('/get_rooms', async (req, res) => {
     res.json(rooms);
 });
 
-router.get('/get_one_room', async (req, res) => {
+router.post('/get_one_room', async (req, res) => {
     if (!validateJoinRoomSchema.safeParse(req.body).success) {
-        res.status(411).json({msg: "Input is not valid"});
+        return res.status(411).json({msg: "Input is not valid"});
     }
-    console.log(JSON.stringify(validateJoinRoomSchema.safeParse(req.body)))
     let password = req.body.password;
     let room = await Room.findOne({_id: req.body.id});
 
-    if (!room) return res.send("Invalid room id");
+    if (!room) return res.status(401).send("Invalid room id");
 
     if (room.private) {
         if (password !== room.password) {
-            return res.send("Wrong room password");
+            return res.status(401).send("Wrong room password");
         };
     };
-    res.json({
+    return res.json({
         "room_id": room._id,
         "room_name": room.roomName,
         "is_private": room.private

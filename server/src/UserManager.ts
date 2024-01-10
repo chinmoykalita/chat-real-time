@@ -1,5 +1,6 @@
 import { connection } from "websocket";
 import { OutGoingMessages } from "./messages/outgoingMessages";
+import User from "./models/user";
 
 interface User {
     name: string;
@@ -30,12 +31,15 @@ export class UserManager {
         });
     };
 
-    getUser(roomId: string, userId: string) {
-        const users = this.rooms.get(roomId)?.users;
-        if (users) {
-            return users.find(({_id}) => _id === userId)
-        }
-
+    async getUser(roomId: string, userId: string) {
+        // const users = this.rooms.get(roomId)?.users;
+        // console.log(users)
+        // if (users) {
+        //     return users.find(({_id}) => _id === userId)
+        // }
+        const user = await User.findOne({_id: userId});
+        console.log(user)
+        return user
     };
 
     removeUser(roomId: string, userId: string) {

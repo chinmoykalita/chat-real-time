@@ -17,12 +17,13 @@ export async function messagesHandler2(ws: connection, message: IncommingMessage
     };
     if (message.type == SupportedMessage.SendMessage) {
         const payload = message.payload;
-        const user = userManager.getUser(payload.roomId, payload.userId)
+        const user = await userManager.getUser(payload.roomId, payload.userId)
         if(!user) {
             console.error("User not found in the room");
             return;
-        }
-        let chat = await store.addChat(payload.userId, user.name, payload.message, payload.roomId);
+        };
+
+        let chat = await store.addChat(payload.userId, user.name || "", payload.message, payload.roomId);
         if (!chat) {
             return
         };

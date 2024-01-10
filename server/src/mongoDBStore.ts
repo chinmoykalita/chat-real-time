@@ -48,8 +48,7 @@ export class MongoDBStore {
             userId,
             name,
             message,
-            room: roomId,
-            upvotes: []
+            room: roomId
         });
         return chat
     };
@@ -79,7 +78,9 @@ export class MongoDBStore {
         };
         
         room.forEach((connection) => {
-            connection.sendUTF(JSON.stringify(outGoingPayload))
+            if (connection.connected) {
+                connection.sendUTF(JSON.stringify(outGoingPayload));
+            }
         });
     }
 }

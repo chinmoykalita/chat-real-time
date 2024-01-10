@@ -1,7 +1,4 @@
 import mongoose, { mongo } from "mongoose";
-import User from "./user";
-import Room from "./room";
-
 const Schema = mongoose.Schema;
 
 const chatSchema = new Schema(
@@ -9,7 +6,10 @@ const chatSchema = new Schema(
         userId: String,
         name: String,
         message: String,
-        room: Room,
+        room: {
+            type: Schema.Types.ObjectId,
+            ref: 'Room'
+        },
         upvotes: {
             type: String, 
             ref: "User"

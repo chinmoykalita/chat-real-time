@@ -27,10 +27,10 @@ export function messagesHandler(ws: connection, message: IncommingMessage) {
             type: OutgoingSupportedMessages.AddChat,
             payload: {
                 chatId: chat.id,
-                roomId: payload.roomId,
+                // roomId: payload.roomId,
                 message: payload.message,
                 name: user.name,
-                upvotes: 0,
+                // upvotes: 0,
             }
         };
         userManager.broadcast(payload.roomId, payload.userId, outGoingPayload)
@@ -44,9 +44,9 @@ export function messagesHandler(ws: connection, message: IncommingMessage) {
         const outGoingPayload: OutGoingMessages = {
             type: OutgoingSupportedMessages.UpdateChat,
             payload: {
-                roomId: payload.roomId,
+                // roomId: payload.roomId,
                 chatId: payload.chatId,
-                upvotes: chat.upvotes.length
+                // upvotes: chat.upvotes.length
             }
         };
         userManager.broadcast(payload.roomId, payload.userId, outGoingPayload)
