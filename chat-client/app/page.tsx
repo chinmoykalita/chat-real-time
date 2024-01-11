@@ -61,6 +61,12 @@ export default function Home() {
       console.log(message);
   });
 
+  const leaveRoom = () => {
+    if (connectedRoom) {
+      setConnectedRoom(null);
+    }
+  }
+
   return (
     <div className='flex items-center justify-center flex-col'>
       <h2 className='text-3xl p-6 mb-10'>SpaceCord</h2>
@@ -70,7 +76,7 @@ export default function Home() {
           setConnectedRoom={setConnectedRoom} 
         />
       }
-      {connectedRoom && <ChatBox room={connectedRoom} socket={socket} />}
+      {(connectedRoom && socket) && <ChatBox room={connectedRoom} socket={socket} leaveRoom={leaveRoom} />}
 
     </div>
   )

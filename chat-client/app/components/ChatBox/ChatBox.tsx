@@ -3,14 +3,14 @@ import { RoomType } from '../../types';
 import './style.css';
 
 type Room = {
-   room: RoomType | null,
-   socket: WebSocket | null
+   room: RoomType,
+   socket: WebSocket,
+   leaveRoom: () => void;
 };
 
-const ChatBox = ({ room, socket }: Room) => {
+const ChatBox = React.memo(({ room, socket, leaveRoom }: Room) => {
    const messagesRef = React.useRef<HTMLDivElement>(null);
-   const [messages, setMessages] = React.useState<Array<string>>([]);
-   const [newMessage, setNewMessage] = React.useState<string>('');
+   const inputBoxRef = React.useRef<HTMLInputElement>(null);
 
 
    const joinRoom = (room_id: string) => {
@@ -25,43 +25,65 @@ const ChatBox = ({ room, socket }: Room) => {
          }));
       };
    };
+
    React.useEffect(() => {
-      if (messagesRef && messagesRef.current) {
-         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-      }
-      setMessages(["hey", "how are you", "are you fine"])
+      joinRoom(room._id)
    }, []);
 
-   const ChatItem = (message: string, index: number) => {
+   const Message = (message: string) => {
       return (
-            <div key={index} className="mb-2 p-2 'bg-gray-300 border-solid border-2 border-black">
-               {message}
-            </div>
+         <div>
+            ChatItem(message, index)
+         </div>
+      )
+   }
+
+   socket?.addEventListener('message', (event) => {
+      console.log("Message recieved");
+      let message = JSON.parse(event.data).payload?.message;
+      console.log(message);
+      // messagesRef.current?.appendChild(ChatItem)
+
+   });
+
+   const sendMessage = () => {
+      socket.send(JSON.stringify({
+         "type": "SEND_MESSAGE",
+         "payload": {
+            userId: localStorage.getItem("loggedUser"),
+            roomId: room._id,
+            message: inputBoxRef.current?.value
+         }
+      }));
+   };
+
+   const ChatItem = (message: string) => {
+      return (
+         <div className="mb-2 p-2 'bg-gray-300 border-solid border-2 border-black">
+            {message}
+         </div>
       )
    }
 
 
    return (
       <>
-         <div>{room?.roomName}</div>
+         <div className=' text-2xl'>{room?.roomName}</div>
+         <div className=' text-blue-600 underline mb-2 cursor-pointer' onClick={leaveRoom}>exit room</div>
 
          <div className="flex flex-col h-96 bg-gray-200 p-4">
-            <div className="flex-1 overflow-y-auto">
-               {messages.map((message, index) => 
-                  ChatItem(message, index)
-               )}
+            <div ref={messagesRef} className="flex-1 overflow-y-auto">
             </div>
             <div className="flex items-center mt-4">
                <input
                   type="text"
                   className="flex-1 p-2 border rounded"
                   placeholder="Type your message..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  ref={inputBoxRef}
                />
                <button
                   className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
-                  // onClick={handleSendMessage}
+                  onClick={sendMessage}
                >
                   Send
                </button>
@@ -70,6 +92,6 @@ const ChatBox = ({ room, socket }: Room) => {
       </>
 
    )
-}
+})
 
 export default ChatBox
