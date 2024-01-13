@@ -8,10 +8,9 @@ type Room = {
    leaveRoom: () => void;
 };
 
-const ChatBox = React.memo(({ room, socket, leaveRoom }: Room) => {
+const ChatBox = ({ room, socket, leaveRoom }: Room) => {
    const messagesRef = React.useRef<HTMLDivElement>(null);
    const inputBoxRef = React.useRef<HTMLInputElement>(null);
-
 
    const joinRoom = (room_id: string) => {
       if (socket) {
@@ -30,41 +29,34 @@ const ChatBox = React.memo(({ room, socket, leaveRoom }: Room) => {
       joinRoom(room._id)
    }, []);
 
-   const Message = (message: string) => {
-      return (
-         <div>
-            ChatItem(message, index)
-         </div>
-      )
-   }
-
    socket?.addEventListener('message', (event) => {
-      console.log("Message recieved");
       let message = JSON.parse(event.data).payload?.message;
-      console.log(message);
-      // messagesRef.current?.appendChild(ChatItem)
-
+      console.log("Message recieved", message);
+      const messageElem = document.createElement("div");
+      messageElem.className = "mb-2 p-2 bg-gray-300 border-solid border-2 border-black"
+      messageElem.innerText = message;
+      messagesRef.current?.appendChild(messageElem);
+      if (messagesRef.current) {
+         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      }
    });
 
+
    const sendMessage = () => {
+      if (!inputBoxRef.current?.value) {
+         return
+      };
+      let message = inputBoxRef.current.value;
       socket.send(JSON.stringify({
          "type": "SEND_MESSAGE",
          "payload": {
             userId: localStorage.getItem("loggedUser"),
             roomId: room._id,
-            message: inputBoxRef.current?.value
+            message: message
          }
       }));
+      inputBoxRef.current.value = ''
    };
-
-   const ChatItem = (message: string) => {
-      return (
-         <div className="mb-2 p-2 'bg-gray-300 border-solid border-2 border-black">
-            {message}
-         </div>
-      )
-   }
-
 
    return (
       <>
@@ -92,6 +84,5 @@ const ChatBox = React.memo(({ room, socket, leaveRoom }: Room) => {
       </>
 
    )
-})
-
+}
 export default ChatBox
