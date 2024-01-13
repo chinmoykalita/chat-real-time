@@ -71,3 +71,13 @@ wsServer.on('request', function(request) {
         }
     });
 });
+
+wsServer.addListener("close", (connection) => {
+    console.log("connection closed")
+})
+
+setInterval(() => {
+    let conns = wsServer.connections.length
+    console.log("Connected users", conns)
+
+}, 1000)

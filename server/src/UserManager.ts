@@ -38,7 +38,6 @@ export class UserManager {
         //     return users.find(({_id}) => _id === userId)
         // }
         const user = await User.findOne({_id: userId});
-        console.log(user)
         return user
     };
 
@@ -62,6 +61,7 @@ export class UserManager {
         };
         
         room.users.forEach(({connection}) => {
+            console.log(connection)
             connection.sendUTF(JSON.stringify(message))
         });
     }

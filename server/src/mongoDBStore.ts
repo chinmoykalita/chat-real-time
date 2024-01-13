@@ -1,7 +1,6 @@
 import { connection } from "websocket";
-import Chat from "./models/chat";
 import Room from "./models/room";
-import { Store } from "./store/Store";
+import Chat from "./models/chat";
 import { OutGoingMessages, SupportedMessage as OutgoingSupportedMessages } from "./messages/outgoingMessages";
 
 
@@ -17,7 +16,12 @@ export class MongoDBStore {
         if (!room) {
             return "Room not found"
         };
-        this.rooms.set(roomId, [ws]);
+        
+        let roomMembers = this.rooms.get(roomId) || [];
+        if (!roomMembers.includes(ws)) {
+            roomMembers.push(ws)
+            this.rooms.set(roomId, roomMembers);
+        }
     };
 
     async leaveRoom(roomId: string, ws: connection) {
@@ -63,6 +67,7 @@ export class MongoDBStore {
     };
 
     broadcastChat(roomId: string, chat: any) {
+        if (!chat) return
         const room =  this.rooms.get(roomId);
         if (!room) {
             console.error("room not found");
@@ -76,11 +81,33 @@ export class MongoDBStore {
                 name: chat.name
             }
         };
-        
+        console.log("Broadcasting the messages to users", room.length)
+        room.forEach((connection) => {
+            console.log(connection.connected)
+        })
         room.forEach((connection) => {
             if (connection.connected) {
                 connection.sendUTF(JSON.stringify(outGoingPayload));
+            } else {
+                this.rooms.set(roomId, room.filter(x => x !== connection));
             }
         });
-    }
-}
+    };
+
+    broadcastMulti(ws: connection, chatList: any) {
+        chatList.forEach((chat: any) => {
+            const outGoingPayload: OutGoingMessages = {
+                type: OutgoingSupportedMessages.AddChat,
+                payload: {
+                    chatId: chat._id,
+                    message: chat.message,
+                    name: chat.name
+                }
+            };
+
+            if (ws.connected) {
+                ws.sendUTF(JSON.stringify(outGoingPayload));
+            };
+        });
+    };
+};

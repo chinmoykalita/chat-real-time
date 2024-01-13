@@ -13,6 +13,9 @@ export async function messagesHandler2(ws: connection, message: IncommingMessage
     if (message.type == SupportedMessage.JoinRoom) {
         const payload = message.payload;
         store.joinRoom(payload.roomId, ws);
+        let chats = await store.getChats(payload.roomId, 40, 0);
+        console.log(chats);
+        store.broadcastMulti(ws, chats);
         // store.broadcast(payload.roomId, `${payload.name} joined`);
     };
     if (message.type == SupportedMessage.SendMessage) {
@@ -30,6 +33,10 @@ export async function messagesHandler2(ws: connection, message: IncommingMessage
 
         store.broadcastChat(payload.roomId, chat)
     };
+    if (message.type === SupportedMessage.LeaveRoom) {
+        const payload = message.payload;
+        store.leaveRoom(payload.roomId, ws)
+    }
     // if (message.type == SupportedMessage.UpvoteMessage) {
     //     const payload = message.payload;
     //     const chat = store.upVote(payload.userId, payload.roomId, payload.chatId);
