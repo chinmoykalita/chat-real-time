@@ -24,13 +24,6 @@ export default React.memo(function MainComponent() {
     };
   }, []);
 
-
-  // socket?.addEventListener('message', (event) => {
-  //   console.log("Message recieved");
-  //   let message = JSON.parse(event.data).payload?.message;
-  //   console.log(message);
-  // });
-
   const leaveRoom = () => {
     if (connectedRoom) {
       if (socket) {
