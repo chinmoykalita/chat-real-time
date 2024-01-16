@@ -44,17 +44,18 @@ const ChatBox = ({ room, socket, leaveRoom }: Room) => {
 
    socket?.addEventListener('message', (event) => {
       // console.log("evening is listening twice")
-      let message = JSON.parse(event.data).payload;
+      let messageBody = JSON.parse(event.data).payload;
+      let message = messageBody.message;
 
-      setChatList([...chatList, message])
+      // setChatList([...chatList, message])
       console.log("setting chat list", chatList.length)
 
-      // console.log("Message recieved", message);
-      // const messageElem = document.createElement("div");
-      // messageElem.innerText = message;
-      // messageElem.className = "mb-2 p-2 bg-gray-300 border-solid border-2 border-black"
-      // messagesRef.current?.appendChild(messageElem);
-      // console.log(message);
+      console.log("Message recieved", message);
+      const messageElem = document.createElement("div");
+      messageElem.innerText = message;
+      messageElem.className = "mb-2 p-2 bg-gray-300 border-solid border-2 border-black"
+      messagesRef.current?.appendChild(messageElem);
+      console.log(message);
       if (messagesRef.current) {
          messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
       }
@@ -85,11 +86,11 @@ const ChatBox = ({ room, socket, leaveRoom }: Room) => {
          <div className="flex flex-col h-96 bg-gray-200 p-4">
             <div ref={messagesRef} className="flex-1 overflow-y-auto">
 
-               {chatList.map((ch, i) => 
+               {/* {chatList.map((ch, i) => 
                   <div key={i} className=' border-black bg-blue-200 p-2 m-2'>
                      {ch.name} - {ch.message}
                   </div>
-               )}
+               )} */}
             </div>
             <div className="flex items-center mt-4">
                <input
