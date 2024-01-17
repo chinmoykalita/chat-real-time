@@ -43,7 +43,7 @@ export class MongoDBStore {
     };
 
     async getChats(roomId: string, limit: number, offset: number) {
-        let chats = await Chat.find({room: roomId}).sort({createdAt: -1}).limit(limit).skip(offset);
+        let chats = await Chat.find({room: roomId}).limit(limit).skip(offset);
         return chats
     };
 

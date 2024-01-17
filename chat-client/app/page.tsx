@@ -25,7 +25,5 @@ export default function Home() {
     };
   }, []);
 
-  return (
-    <MainComponent />
-  )
+  return <MainComponent />
 }
