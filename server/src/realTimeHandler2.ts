@@ -36,6 +36,10 @@ export async function messagesHandler2(ws: connection, message: IncommingMessage
     if (message.type === SupportedMessage.LeaveRoom) {
         const payload = message.payload;
         store.leaveRoom(payload.roomId, ws)
+        console.log(connection, "left room");
+    }
+    if (message.type === "newroom") {
+        console.log("added new room")
     }
     // if (message.type == SupportedMessage.UpvoteMessage) {
     //     const payload = message.payload;
