@@ -5,24 +5,12 @@ import { RoomType } from '../types';
 import axios from 'axios';
 import RoomList from './RoomList';
 import ChatBox from './ChatBox/ChatBox';
+import { useSocket } from '../hooks/hooks';
 
 export default React.memo(function MainComponent() {
-  const [socket, setSocket] = useState<WebSocket | null>(null);
   const [connectedRoom, setConnectedRoom] = useState<RoomType | null>(null);
-
-  useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8080", ['echo-protocol']);
-    socket.addEventListener('open', (event) => {
-      console.log('WebSocket connection opened:', event);
-      setSocket(socket);
-    });
-
-    return () => {
-      if (socket) {
-        socket.close()
-      }
-    };
-  }, []);
+  
+  const socket = useSocket("ws://localhost:8080");
 
   const leaveRoom = () => {
     if (connectedRoom) {
@@ -41,7 +29,7 @@ export default React.memo(function MainComponent() {
 
   return (
     <div className='flex items-center justify-center flex-col'>
-      <h2 className='text-3xl p-6 mb-10'>SpaceCord</h2>
+      <h2 className='text-3xl p-6'>SpaceCord</h2>
       {!connectedRoom &&
         <RoomList
           connectedRoom={connectedRoom}

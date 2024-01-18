@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FormEvent } from 'react'
 import { RoomType } from '../../types';
 import './style.css';
 
@@ -15,7 +15,7 @@ type Message = {
 };
 
 
-const ChatBox = ({ room, socket, leaveRoom }: Room) => {
+const ChatBox = React.memo(({ room, socket, leaveRoom }: Room) => {
    console.log("chatbox component rerendering")
    const messagesRef = React.useRef<HTMLDivElement>(null);
    const inputBoxRef = React.useRef<HTMLInputElement>(null);
@@ -39,6 +39,7 @@ const ChatBox = ({ room, socket, leaveRoom }: Room) => {
 
    React.useEffect(() => {
       joinRoom(room._id);
+      inputBoxRef.current?.focus();
    }, []);
 
 
@@ -62,7 +63,8 @@ const ChatBox = ({ room, socket, leaveRoom }: Room) => {
    });
 
 
-   const sendMessage = () => {
+   const sendMessage = (e: FormEvent) => {
+      e.preventDefault();
       if (!inputBoxRef.current?.value) {
          return
       };
@@ -83,7 +85,7 @@ const ChatBox = ({ room, socket, leaveRoom }: Room) => {
          <div className=' text-2xl'>{room?.roomName}</div>
          <div className=' text-blue-600 underline mb-2 cursor-pointer' onClick={leaveRoom}>exit room</div>
 
-         <div className="flex flex-col h-96 bg-gray-200 p-4">
+         <div className="flex flex-col h-[75vh] w-full md:w-[80vw] bg-gray-200 p-4">
             <div ref={messagesRef} className="flex-1 overflow-y-auto">
 
                {/* {chatList.map((ch, i) => 
@@ -92,7 +94,7 @@ const ChatBox = ({ room, socket, leaveRoom }: Room) => {
                   </div>
                )} */}
             </div>
-            <div className="flex items-center mt-4">
+            <form onSubmit={(e) => sendMessage(e)} className="flex items-center mt-4">
                <input
                   type="text"
                   className="flex-1 p-2 border rounded"
@@ -101,14 +103,14 @@ const ChatBox = ({ room, socket, leaveRoom }: Room) => {
                />
                <button
                   className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
-                  onClick={sendMessage}
+                  type='submit'
                >
                   Send
                </button>
-            </div>
+            </form>
          </div>
       </>
 
    )
-}
+})
 export default ChatBox
