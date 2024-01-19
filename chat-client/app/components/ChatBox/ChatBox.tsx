@@ -88,11 +88,11 @@ const ChatBox = React.memo(({ room, socket, leaveRoom }: Room) => {
          <div className="flex flex-col h-[75vh] w-full md:w-[80vw] bg-gray-200 p-4">
             <div ref={messagesRef} className="flex-1 overflow-y-auto">
 
-               {/* {chatList.map((ch, i) => 
+               {chatList.map((ch, i) => 
                   <div key={i} className=' border-black bg-blue-200 p-2 m-2'>
                      {ch.name} - {ch.message}
                   </div>
-               )} */}
+               )}
             </div>
             <form onSubmit={(e) => sendMessage(e)} className="flex items-center mt-4">
                <input
