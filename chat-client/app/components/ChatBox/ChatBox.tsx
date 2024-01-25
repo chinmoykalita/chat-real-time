@@ -97,7 +97,7 @@ const ChatBox = React.memo(({ room, socket, leaveRoom }: Room) => {
             <form onSubmit={(e) => sendMessage(e)} className="flex items-center mt-4">
                <input
                   type="text"
-                  className="flex-1 p-2 border rounded"
+                  className="flex-1 p-2 border rounded hover:bg-cyan-100"
                   placeholder="Type your message..."
                   ref={inputBoxRef}
                />
